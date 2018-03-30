@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask, request, redirect, url_for, session, g, flash, \
      render_template
 from flask_oauth import OAuth
@@ -5,7 +6,6 @@ from flask_oauth import OAuth
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-import requests
 
 # configuration
 SECRET_KEY = 'development key'
@@ -47,8 +47,6 @@ def index():
     if access_token is None:
         return redirect(url_for('login'))
 
-#    resp   = requests.get('https://api.twitter.com/1.1/account/verify_credentials.json')
-#    print "RESP ", resp.text
     access_token = access_token[0]
 
     return render_template('index.html')
@@ -65,7 +63,8 @@ def logout():
     flash('You were signed out')
     return redirect(request.referrer or url_for('index'))
 
-
+#Note: à tester:
+#https://api.twitter.com/1.1/account/verify_credentials.json?oauth_consumer_key=X&oauth_nonce=Y&oauth_signature_method=A&oauth_signature=V&oauth_timestamp=N&oauth_token=M&oauth_version=1.0156
 @app.route('/oauth-authorized')
 @twitter.authorized_handler
 def oauth_authorized(resp):
@@ -77,7 +76,7 @@ def oauth_authorized(resp):
     access_token = resp['oauth_token']
     session['access_token'] = access_token
     session['screen_name'] = resp['screen_name']
-    print "access_token ---> ", resp, access_token
+    print "access_token ---> ", session
     session['twitter_token'] = (
         resp['oauth_token'],
         resp['oauth_token_secret']
