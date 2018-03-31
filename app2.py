@@ -21,7 +21,7 @@ oauth = OAuth()
 twitter = oauth.remote_app('twitter',
     # unless absolute urls are used to make requests, this will be added
     # before all URLs.  This is also true for request_token_url and others.
-    base_url='https://api.twitter.com/1/',
+    base_url='https://api.twitter.com/1.1/',
     # where flask should look for new request tokens
     request_token_url='https://api.twitter.com/oauth/request_token',
     # where flask should exchange the token with the remote application
@@ -73,10 +73,12 @@ def oauth_authorized(resp):
         flash(u'You denied the request to sign in.')
         return redirect(next_url)
 
+#https://api.twitter.com/1/account/verify_credentials.json?oauth_consumer_key=qUqCpiM61QgeF8c1ll4gEsK5v&oauth_nonce=XXX&oauth_signature_method=HMAC-SHA1&oauth_token=2784267995-rIsQChjK6yTg47Ai6fPKtuMZFMFk9eknTSb0xy5&oauth_timestamp\=123456789\&oauth_version\=1.0\&oauth_signature\=YYY
+
     access_token = resp['oauth_token']
     session['access_token'] = access_token
     session['screen_name'] = resp['screen_name']
-    print "access_token ---> ", session
+    print "resp ---> ", resp
     session['twitter_token'] = (
         resp['oauth_token'],
         resp['oauth_token_secret']
