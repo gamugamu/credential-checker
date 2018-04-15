@@ -33,6 +33,7 @@ def oauth_req(url, key, secret, http_method="GET", post_body="", http_headers=No
     resp, content   = client.request( url, method=http_method, body=post_body, headers=http_headers )
     return content
 
+#TODO, à deplacer dans back end server, check for twitter
 @app.route("/test")
 def test():
     print "session", session
